@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bil Bakalım - Oyuncu Yarışması</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Quicksand:wght@700&display=swap');
+
+        body {
+            margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;
+            height: 100vh; font-family: 'Quicksand', sans-serif; background: #111; overflow: hidden;
+        }
+
+        #game-container {
+            width: 1024px; height: 576px;
+            background-image: url('arka_plan.jpg');
+            background-size: 100% 100%;
+            position: relative; border-radius: 10px;
+        }
+
+        .screen {
+            position: absolute; width: 100%; height: 100%;
+            top: 0; left: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .hidden { display: none !important; }
+
+        h1 { color: #fff; font-family: 'Luckiest Guy', cursive; font-size: 80px; text-shadow: 6px 6px 0px #8b4513; margin-bottom: 30px; }
+
+        /* Puan Panelleri */
+        .score-side {
+            position: absolute; top: 180px; width: 150px; height: 230px;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-around;
+            background: rgba(255, 255, 255, 0.25); border-radius: 20px; border: 3px solid #fff;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3); backdrop-filter: blur(5px);
+        }
+        #left-side { left: 35px; }
+        #right-side { right: 35px; }
+
+        .player-label { color: #fff; font-size: 18px; font-weight: 800; text-shadow: 1px 1px 2px #000; }
+        .score-val { font-size: 60px; color: white; text-shadow: 2px 2px 4px #000; font-weight: 800; }
+        
+        .puan-btn {
+            padding: 12px 20px; font-size: 18px; cursor: pointer; border: none;
+            border-radius: 15px; font-weight: bold; color: white; transition: 0.2s;
+        }
+        .btn-l { background: #e91e63; }
+        .btn-r { background: #2196f3; }
+        .puan-btn:active { transform: scale(0.95); }
+
+        /* Oyun Alanları */
+        #scrambled-box {
+            position: absolute; top: 188px; left: 235px; width: 555px; height: 78px;
+            background: #76b018; border-radius: 40px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 40px; color: white; font-weight: 800; letter-spacing: 6px;
+        }
+
+        #answer-box {
+            position: absolute; top: 298px; left: 235px; width: 555px; height: 78px;
+            background: #ffcc33; border-radius: 40px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 36px; color: #5d4037; font-weight: 800; cursor: pointer;
+        }
+
+        #skip-btn {
+            position: absolute; top: 140px; left: 450px;
+            background: #ff5722; color: white; border: 2px solid white;
+            padding: 8px 25px; border-radius: 20px; cursor: pointer;
+            font-weight: bold; font-size: 16px;
+        }
+
+        #timer-box {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #8b4513; color: white; padding: 10px 30px; border-radius: 30px;
+            font-size: 26px; border: 3px solid white;
+        }
+
+        .btn-start {
+            padding: 15px 45px; margin: 10px; font-size: 24px; cursor: pointer;
+            border: 5px solid #fff; border-radius: 50px; background: #76b018; color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="start-screen" class="screen">
+        <h1>BİL BAKALIM</h1>
+        <div style="display: flex;">
+            <button class="btn-start" onclick="startGame(60)">1 DK</button>
+            <button class="btn-start" onclick="startGame(300)">5 DK</button>
+            <button class="btn-start" onclick="startGame(600)">10 DK</button>
+        </div>
+    </div>
+
+    <div id="game-screen" class="screen hidden">
+        <div id="timer-box">⏱ <span id="timer">00:00</span></div>
+
+        <div class="score-side" id="left-side">
+            <span class="player-label">1. OYUNCU</span>
+            <div id="score-l" class="score-val">0</div>
+            <button class="puan-btn btn-l" onclick="addScore('L')">+10</button>
+        </div>
+
+        <button id="skip-btn" onclick="nextQuestion()">ATLA ➔</button>
+        <div id="scrambled-box">...</div>
+        <div id="answer-box" onclick="revealAnswer()">CEVABI GÖSTER</div>
+
+        <div class="score-side" id="right-side">
+            <span class="player-label">2. OYUNCU</span>
+            <div id="score-r" class="score-val">0</div>
+            <button class="puan-btn btn-r" onclick="addScore('R')">+10</button>
+        </div>
+    </div>
+
+    <div id="end-screen" class="screen hidden" style="background: rgba(0,0,0,0.85);">
+        <h1 id="winner-text">OYUN BİTTİ</h1>
+        <div id="final-scores" style="color: #ffcc33; font-size: 35px; margin-bottom: 30px;"></div>
+        <button class="btn-start" onclick="location.reload()">YENİDEN BAŞLA</button>
+    </div>
+</div>
+
+<script>
+    const allWords = ["ADALET", "AİLE", "AKILLI", "ANNE", "ANKARA", "ARABA", "ASLAN", "ASKER", "ATATÜRK", "AYNA", "BAHÇE", "BALIK", "BALON", "BARDAK", "BAŞARI", "BAYRAM", "BİSİKLET", "BİLGİSAYAR", "BULUT", "CEVİZ", "CETVEL", "ÇALIŞKAN", "ÇANTA", "ÇİÇEK", "ÇOCUK", "DEFTER", "DENİZ", "DOKTOR", "DÜNYA", "EĞİTİM", "EKMEK", "ELMA", "FENER", "FINDIK", "FUTBOL", "GAZETE", "GECE", "GEMİ", "GÜNEŞ", "GÜZEL", "HARİTA", "HAYVAN", "HEDİYE", "HOROZ", "IRMAK", "IŞIK", "İSTANBUL", "İTFAİYE", "KAHVALTI", "KALEM", "KAPLAN", "KARDEŞ", "KARPUZ", "KEDİ", "KELEBEK", "KİTAP", "KÜTÜPHANE", "LİMON", "MAKAS", "MANAV", "MASA", "MATEMATİK", "MAYMUN", "MEKTUP", "MERCİMEK", "MERDİVEN", "MEYVE", "MISIR", "MİNARE", "MİSAFİR", "MUHTAR", "MUTFAK", "MÜHENDİS", "MÜZİK", "NANE", "NAR", "NASİHAT", "NAZİK", "NEFES", "NEHİR", "NESNE", "NİSAN", "NUMARA", "OCAK", "ODUN", "OKUL", "OKYANUS", "OLTA", "ORMAN", "OTOBÜS", "OYUN", "ÖĞRETMEN", "ÖĞRENCİ", "ÖRDEK", "ÖRÜMCEK", "PAKET", "PAMUK", "PANTOLON", "PAPATYA", "PARK", "PATATES", "PAZAR", "PEYNİR", "PİKNİK", "PİLOT", "PORTAKAL", "POSTACI", "RADYO", "RAKAM", "RANDEVU", "REÇEL", "REHBER", "RESİM", "ROMAN", "RÜZGAR", "SAAT", "SABAH", "SABUN", "SAĞLIK", "SAHNE", "SAKIZ", "SALATA", "SANAT", "SANDALYE", "SARI", "SAYFA", "SEPET", "SEVGİ", "SINAV", "SINIF", "SİLGİ", "SİNEK", "SİS", "SİVAS", "SOKAK", "SORU", "SÖZLÜK", "SPOR", "SU", "SULTAN", "SÜRAHİ", "ŞALVAR", "ŞAMPUAN", "ŞANS", "ŞARKİ", "ŞEHİR", "ŞEKER", "ŞEMSİYE", "TABAK", "TABİAT", "TAHTA", "TAKİP", "TAKTAK", "TAVŞAN", "TAVUK", "TEKERLEK", "TELEFON", "TELEVİZYON", "TEMİZ", "TEPSİ", "TERZİ", "TİYATRO", "TOHUM", "TOPRAK", "TRAFİK", "TREN", "TURUNCU", "TÜRKÇE", "UÇAK", "UÇURTMA", "UMUT", "UYKU", "ÜÇGEN", "ÜLKE", "ÜNİVERSİTE", "ÜZÜM", "VAGON", "VALİZ", "VAPUR", "VATAN", "VİTRİN", "VİRGÜL", "YAĞMUR", "YALAN", "YAMURTA", "YAPRAK", "YARDIM", "YASTIK", "YAYLA", "YAZAR", "YEMEK", "YILDIZ", "YOĞURT", "YOLCU", "YUMURTA", "YUNUS", "YÜZÜK", "ZAMAN", "ZEBRA", "ZEYTİN", "ZİNCİR", "ZÜRAFA"];
+
+    let wordPool = [...allWords]; // Oyun başladığında havuzu kopyala
+    let scoreL = 0, scoreR = 0, timeLeft = 0, currentWord = "", timerInterval;
+
+    function startGame(seconds) {
+        timeLeft = seconds;
+        scoreL = 0; scoreR = 0;
+        wordPool = [...allWords]; // Her yeni oyunda havuzu sıfırla
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        nextQuestion();
+        startTimer();
+    }
+
+    function nextQuestion() {
+        if (wordPool.length === 0) {
+            endGame(); // Kelimeler biterse oyunu bitir
+            return;
+        }
+
+        // Havuzdan rastgele bir kelime seç ve havuzdan çıkar (tekrar etmemesi için)
+        const randomIndex = Math.floor(Math.random() * wordPool.length);
+        currentWord = wordPool.splice(randomIndex, 1)[0].toUpperCase();
+        
+        document.getElementById('scrambled-box').innerText = scramble(currentWord);
+        document.getElementById('answer-box').innerText = "CEVABI GÖSTER";
+        document.getElementById('answer-box').style.color = "#5d4037";
+    }
+
+    function scramble(word) {
+        let a = word.split(""), n = a.length;
+        for(let i = n - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        let res = a.join("");
+        return res === word ? scramble(word) : res;
+    }
+
+    function revealAnswer() {
+        document.getElementById('answer-box').innerText = currentWord;
+        document.getElementById('answer-box').style.color = "#d32f2f";
+        beep(400);
+    }
+
+    function addScore(side) {
+        if(side === 'L') { scoreL += 10; document.getElementById('score-l').innerText = scoreL; }
+        else { scoreR += 10; document.getElementById('score-r').innerText = scoreR; }
+        beep(800);
+        nextQuestion();
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            let m = Math.floor(timeLeft / 60), s = timeLeft % 60;
+            document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+            if (timeLeft <= 0) { clearInterval(timerInterval); endGame(); }
+        }, 1000);
+    }
+
+    function endGame() {
+        clearInterval(timerInterval);
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('end-screen').classList.remove('hidden');
+        let msg = scoreL > scoreR ? "1. OYUNCU KAZANDI! 🏆" : (scoreR > scoreL ? "2. OYUNCU KAZANDI! 🏆" : "BERABERE! 🤝");
+        document.getElementById('winner-text').innerText = msg;
+        document.getElementById('final-scores').innerText = `1. OYUNCU: ${scoreL} - 2. OYUNCU: ${scoreR}`;
+    }
+
+    function beep(f) {
+        try {
+            let c = new (window.AudioContext || window.webkitAudioContext)();
+            let o = c.createOscillator(), g = c.createGain();
+            o.connect(g); g.connect(c.destination);
+            o.frequency.value = f; o.start();
+            g.gain.exponentialRampToValueAtTime(0.00001, c.currentTime + 0.1);
+            o.stop(c.currentTime + 0.1);
+        } catch(e) {}
+    }
+</script>
+</body>
+</html>
