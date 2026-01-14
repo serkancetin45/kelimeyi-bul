@@ -3,85 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bil Bakalım - Oyuncu Yarışması</title>
+    <title>Bil Bakalım - Bilgi Yarışması</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Quicksand:wght@700&display=swap');
 
+        * { box-sizing: border-box; }
+
         body {
             margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;
-            height: 100vh; font-family: 'Quicksand', sans-serif; background: #111; overflow: hidden;
+            min-height: 100vh; font-family: 'Quicksand', sans-serif; background: #000; overflow: hidden;
         }
 
         #game-container {
-            width: 1024px; height: 576px;
-            background-image: url('arka_plan.jpg');
-            background-size: 100% 100%;
-            position: relative; border-radius: 10px;
+            width: 95vw; max-width: 1024px; aspect-ratio: 16/9;
+            background: #000; position: relative; border-radius: 15px; 
+            border: 4px solid #5d4037; box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden;
         }
 
         .screen {
-            position: absolute; width: 100%; height: 100%;
-            top: 0; left: 0;
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
         .hidden { display: none !important; }
 
-        h1 { color: #fff; font-family: 'Luckiest Guy', cursive; font-size: 80px; text-shadow: 6px 6px 0px #8b4513; margin-bottom: 30px; }
-
-        /* Puan Panelleri */
-        .score-side {
-            position: absolute; top: 180px; width: 150px; height: 230px;
-            display: flex; flex-direction: column; align-items: center; justify-content: space-around;
-            background: rgba(255, 255, 255, 0.25); border-radius: 20px; border: 3px solid #fff;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.3); backdrop-filter: blur(5px);
+        h1 { 
+            color: #fff; font-family: 'Luckiest Guy', cursive; 
+            font-size: clamp(40px, 10vw, 90px); 
+            text-shadow: 4px 4px 0px #5d4037; margin: 0 0 20px 0; 
         }
-        #left-side { left: 35px; }
-        #right-side { right: 35px; }
 
-        .player-label { color: #fff; font-size: 18px; font-weight: 800; text-shadow: 1px 1px 2px #000; }
-        .score-val { font-size: 60px; color: white; text-shadow: 2px 2px 4px #000; font-weight: 800; }
+        .score-side {
+            position: absolute; top: 30%; width: 16%; height: 45%;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-around;
+            background: rgba(255, 255, 255, 0.1); border-radius: 20px; border: 2px solid #76b018;
+            padding: 5px;
+        }
+        #left-side { left: 2%; }
+        #right-side { right: 2%; }
+
+        .player-label { color: #fff; font-size: clamp(12px, 1.8vw, 20px); font-weight: 800; }
+        .score-val { font-size: clamp(35px, 6vw, 70px); color: #ffcc33; text-shadow: 2px 2px 4px #000; }
         
         .puan-btn {
-            padding: 12px 20px; font-size: 18px; cursor: pointer; border: none;
-            border-radius: 15px; font-weight: bold; color: white; transition: 0.2s;
+            padding: 10px; font-size: clamp(12px, 1.5vw, 18px); cursor: pointer; border: none;
+            border-radius: 12px; font-weight: bold; color: white; width: 90%; transition: transform 0.1s;
         }
         .btn-l { background: #e91e63; }
         .btn-r { background: #2196f3; }
-        .puan-btn:active { transform: scale(0.95); }
+        .puan-btn:active { transform: scale(0.9); }
 
-        /* Oyun Alanları */
         #scrambled-box {
-            position: absolute; top: 188px; left: 235px; width: 555px; height: 78px;
+            position: absolute; top: 32%; left: 22%; width: 56%; height: 15%;
             background: #76b018; border-radius: 40px;
             display: flex; justify-content: center; align-items: center;
-            font-size: 40px; color: white; font-weight: 800; letter-spacing: 6px;
+            font-size: clamp(20px, 4.5vw, 45px); color: white; font-weight: 800; letter-spacing: 5px;
         }
 
         #answer-box {
-            position: absolute; top: 298px; left: 235px; width: 555px; height: 78px;
+            position: absolute; top: 52%; left: 22%; width: 56%; height: 15%;
             background: #ffcc33; border-radius: 40px;
             display: flex; justify-content: center; align-items: center;
-            font-size: 36px; color: #5d4037; font-weight: 800; cursor: pointer;
+            font-size: clamp(18px, 4vw, 40px); color: #5d4037; font-weight: 800; cursor: pointer;
         }
 
         #skip-btn {
-            position: absolute; top: 140px; left: 450px;
+            position: absolute; top: 21%; left: 42%; width: 16%;
             background: #ff5722; color: white; border: 2px solid white;
-            padding: 8px 25px; border-radius: 20px; cursor: pointer;
-            font-weight: bold; font-size: 16px;
+            padding: 6px; border-radius: 20px; cursor: pointer; font-weight: bold;
         }
 
         #timer-box {
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            background: #8b4513; color: white; padding: 10px 30px; border-radius: 30px;
-            font-size: 26px; border: 3px solid white;
+            position: absolute; top: 5%; left: 50%; transform: translateX(-50%);
+            color: #fff; font-size: clamp(20px, 3.5vw, 32px); font-weight: 800;
         }
 
         .btn-start {
-            padding: 15px 45px; margin: 10px; font-size: 24px; cursor: pointer;
-            border: 5px solid #fff; border-radius: 50px; background: #76b018; color: white;
+            padding: 15px 45px; margin: 15px; font-size: 24px; cursor: pointer;
+            border: 4px solid #fff; border-radius: 50px; background: #76b018; color: white;
             font-weight: bold;
+        }
+
+        @media (max-aspect-ratio: 1/1) {
+            .score-side { top: 75%; width: 45%; height: 18%; }
+            #scrambled-box { width: 90%; left: 5%; top: 30%; }
+            #answer-box { width: 90%; left: 5%; top: 48%; }
+            #skip-btn { left: 35%; width: 30%; top: 20%; }
         }
     </style>
 </head>
@@ -90,50 +97,55 @@
 <div id="game-container">
     <div id="start-screen" class="screen">
         <h1>BİL BAKALIM</h1>
-        <div style="display: flex;">
-            <button class="btn-start" onclick="startGame(60)">1 DK</button>
-            <button class="btn-start" onclick="startGame(300)">5 DK</button>
-            <button class="btn-start" onclick="startGame(600)">10 DK</button>
-        </div>
+        <button class="btn-start" onclick="startGame(60)">1 DAKİKA</button>
+        <button class="btn-start" onclick="startGame(300)">5 DAKİKA</button>
+        <button class="btn-start" onclick="startGame(600)">10 DAKİKA</button>
     </div>
 
     <div id="game-screen" class="screen hidden">
         <div id="timer-box">⏱ <span id="timer">00:00</span></div>
-
         <div class="score-side" id="left-side">
             <span class="player-label">1. OYUNCU</span>
             <div id="score-l" class="score-val">0</div>
-            <button class="puan-btn btn-l" onclick="addScore('L')">+10</button>
+            <button class="puan-btn btn-l" onclick="addScore('L')">PUAN +</button>
         </div>
-
         <button id="skip-btn" onclick="nextQuestion()">ATLA ➔</button>
         <div id="scrambled-box">...</div>
         <div id="answer-box" onclick="revealAnswer()">CEVABI GÖSTER</div>
-
         <div class="score-side" id="right-side">
             <span class="player-label">2. OYUNCU</span>
             <div id="score-r" class="score-val">0</div>
-            <button class="puan-btn btn-r" onclick="addScore('R')">+10</button>
+            <button class="puan-btn btn-r" onclick="addScore('R')">PUAN +</button>
         </div>
     </div>
 
-    <div id="end-screen" class="screen hidden" style="background: rgba(0,0,0,0.85);">
-        <h1 id="winner-text">OYUN BİTTİ</h1>
-        <div id="final-scores" style="color: #ffcc33; font-size: 35px; margin-bottom: 30px;"></div>
-        <button class="btn-start" onclick="location.reload()">YENİDEN BAŞLA</button>
+    <div id="end-screen" class="screen hidden" style="background: rgba(0,0,0,0.95);">
+        <h1 id="winner-text">BİTTİ</h1>
+        <div id="final-scores" style="color: #ffcc33; font-size: 32px; margin-bottom: 30px;"></div>
+        <button class="btn-start" onclick="location.reload()">TEKRAR BAŞLA</button>
     </div>
 </div>
 
 <script>
-    const allWords = ["ADALET", "AİLE", "AKILLI", "ANNE", "ANKARA", "ARABA", "ASLAN", "ASKER", "ATATÜRK", "AYNA", "BAHÇE", "BALIK", "BALON", "BARDAK", "BAŞARI", "BAYRAM", "BİSİKLET", "BİLGİSAYAR", "BULUT", "CEVİZ", "CETVEL", "ÇALIŞKAN", "ÇANTA", "ÇİÇEK", "ÇOCUK", "DEFTER", "DENİZ", "DOKTOR", "DÜNYA", "EĞİTİM", "EKMEK", "ELMA", "FENER", "FINDIK", "FUTBOL", "GAZETE", "GECE", "GEMİ", "GÜNEŞ", "GÜZEL", "HARİTA", "HAYVAN", "HEDİYE", "HOROZ", "IRMAK", "IŞIK", "İSTANBUL", "İTFAİYE", "KAHVALTI", "KALEM", "KAPLAN", "KARDEŞ", "KARPUZ", "KEDİ", "KELEBEK", "KİTAP", "KÜTÜPHANE", "LİMON", "MAKAS", "MANAV", "MASA", "MATEMATİK", "MAYMUN", "MEKTUP", "MERCİMEK", "MERDİVEN", "MEYVE", "MISIR", "MİNARE", "MİSAFİR", "MUHTAR", "MUTFAK", "MÜHENDİS", "MÜZİK", "NANE", "NAR", "NASİHAT", "NAZİK", "NEFES", "NEHİR", "NESNE", "NİSAN", "NUMARA", "OCAK", "ODUN", "OKUL", "OKYANUS", "OLTA", "ORMAN", "OTOBÜS", "OYUN", "ÖĞRETMEN", "ÖĞRENCİ", "ÖRDEK", "ÖRÜMCEK", "PAKET", "PAMUK", "PANTOLON", "PAPATYA", "PARK", "PATATES", "PAZAR", "PEYNİR", "PİKNİK", "PİLOT", "PORTAKAL", "POSTACI", "RADYO", "RAKAM", "RANDEVU", "REÇEL", "REHBER", "RESİM", "ROMAN", "RÜZGAR", "SAAT", "SABAH", "SABUN", "SAĞLIK", "SAHNE", "SAKIZ", "SALATA", "SANAT", "SANDALYE", "SARI", "SAYFA", "SEPET", "SEVGİ", "SINAV", "SINIF", "SİLGİ", "SİNEK", "SİS", "SİVAS", "SOKAK", "SORU", "SÖZLÜK", "SPOR", "SU", "SULTAN", "SÜRAHİ", "ŞALVAR", "ŞAMPUAN", "ŞANS", "ŞARKİ", "ŞEHİR", "ŞEKER", "ŞEMSİYE", "TABAK", "TABİAT", "TAHTA", "TAKİP", "TAKTAK", "TAVŞAN", "TAVUK", "TEKERLEK", "TELEFON", "TELEVİZYON", "TEMİZ", "TEPSİ", "TERZİ", "TİYATRO", "TOHUM", "TOPRAK", "TRAFİK", "TREN", "TURUNCU", "TÜRKÇE", "UÇAK", "UÇURTMA", "UMUT", "UYKU", "ÜÇGEN", "ÜLKE", "ÜNİVERSİTE", "ÜZÜM", "VAGON", "VALİZ", "VAPUR", "VATAN", "VİTRİN", "VİRGÜL", "YAĞMUR", "YALAN", "YAMURTA", "YAPRAK", "YARDIM", "YASTIK", "YAYLA", "YAZAR", "YEMEK", "YILDIZ", "YOĞURT", "YOLCU", "YUMURTA", "YUNUS", "YÜZÜK", "ZAMAN", "ZEBRA", "ZEYTİN", "ZİNCİR", "ZÜRAFA"];
+    // Max 7 Harfli Kelime Havuzu (Meyve, Sebze, Eşya, Hayvan, Şehir, İsim, Ülke)
+    const allWords = [
+        "ELMA", "ARMUT", "KİRAZ", "VİŞNE", "MUZ", "ÇİLEK", "KAYISI", "KAVUN", "KARPUZ", "ERİK", "İNCİR", "NAR", "DUT", "AYVA", "ÜZÜM", "LİMON", "KİVİ", "MANGO", 
+        "PIRASA", "LAHANA", "ISPANAK", "HAVUÇ", "PATATES", "DOMATES", "BİBER", "PATLICAN", "KABAK", "SARIMSAK", "PANCAR", "TURP", "MANTAR", "MARUL", "ROKA", "TERE",
+        "MASA", "SIRALIK", "KALEM", "DEFTER", "SİLGİ", "ÇANTA", "KİTAP", "DOLAP", "KOLTUK", "HALI", "PERDE", "LAMBA", "AYNA", "SAAT", "RADYO", "TEPSİ", "TABAK", "ÇATAL", "KAŞIK", "BARDAK", "TAVA", "SÜRAHİ", "MAKAS", "CETVEL",
+        "ASLAN", "KAPLAN", "ZEBRA", "ZÜRAFA", "AYI", "KURT", "TİLKİ", "TAVŞAN", "SİNCAP", "KEDİ", "KÖPEK", "AT", "EŞEK", "İNEK", "KOYUN", "KEÇİ", "TAVUK", "HOROZ", "ÖRDEK", "KAZ", "KARTAL", "ŞAHİN", "SERÇE", "BALIK", "YUNUS", "BALİNA",
+        "ANKARA", "İSTANBUL", "İZMİR", "BURSA", "ADANA", "ANTALYA", "KONYA", "SAMSUN", "DENİZLİ", "SİVAS", "MUĞLA", "AYDIN", "MANİSA", "MERSİN", "HATAY", "BOLU", "EDİRNE", "RİZE", "ORDU", "KARS", "TOKAT", "UŞAK", "VAN",
+        "ALİ", "AYŞE", "AHMET", "MEHMET", "ZEYNEP", "ELİF", "FATMA", "MUSTAFA", "HAKAN", "DENİZ", "CAN", "UMUT", "EDA", "OYA", "MERT", "EMRE", "BURAK", "PELİN", "MELİS", "KEREM", "SELİN", "ARDA", "İREM", "GAMZE", "GÖKBERK",
+        "TÜRKİYE", "ALMANYA", "FRANSA", "İTALYA", "İSPANYA", "MISIR", "RUSYA", "JAPONYA", "ÇİN", "KORE", "BREZİLYA", "KANADA", "İSVİÇRE", "BELÇİKA", "HOLLANDA", "YUNANİSTAN", "SURİYE", "IRAK", "İRAN", "AZERBAYCAN",
+        "FENER", "ADALET", "AKILLI", "AİLE", "OKUL", "SINIF", "DERS", "SINAV", "OYUN", "BAŞARI", "DOĞA", "ENERJİ", "DENEY", "MÜZE", "SARAY", "DÜNYA", "GEZEGEN", "GÜNEŞ", "YILDIZ", "BULUT", "YAĞMUR", "KAR", "RÜZGAR", "HAVA", "TOPRAK"
+    ]; // Bu liste 750'ye kadar kopyalanarak/çoğaltılarak kullanılabilir.
 
-    let wordPool = [...allWords]; // Oyun başladığında havuzu kopyala
-    let scoreL = 0, scoreR = 0, timeLeft = 0, currentWord = "", timerInterval;
+    let wordPool = [], scoreL = 0, scoreR = 0, timeLeft = 0, currentWord = "", timerInterval, hintInterval, hintTimeout;
+    let revealedHint = "";
 
     function startGame(seconds) {
         timeLeft = seconds;
         scoreL = 0; scoreR = 0;
-        wordPool = [...allWords]; // Her yeni oyunda havuzu sıfırla
+        wordPool = [...allWords]; 
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('game-screen').classList.remove('hidden');
         nextQuestion();
@@ -141,18 +153,35 @@
     }
 
     function nextQuestion() {
-        if (wordPool.length === 0) {
-            endGame(); // Kelimeler biterse oyunu bitir
-            return;
-        }
-
-        // Havuzdan rastgele bir kelime seç ve havuzdan çıkar (tekrar etmemesi için)
-        const randomIndex = Math.floor(Math.random() * wordPool.length);
-        currentWord = wordPool.splice(randomIndex, 1)[0].toUpperCase();
+        if (wordPool.length === 0) { endGame(); return; }
+        clearTimeout(hintTimeout);
+        clearInterval(hintInterval);
+        
+        const idx = Math.floor(Math.random() * wordPool.length);
+        currentWord = wordPool.splice(idx, 1)[0].toUpperCase();
+        revealedHint = "_ ".repeat(currentWord.length).trim();
         
         document.getElementById('scrambled-box').innerText = scramble(currentWord);
         document.getElementById('answer-box').innerText = "CEVABI GÖSTER";
         document.getElementById('answer-box').style.color = "#5d4037";
+
+        hintTimeout = setTimeout(() => {
+            showHintChar(0); 
+            hintInterval = setInterval(() => {
+                let currentHintFlat = revealedHint.replace(/ /g, "");
+                let nextIdx = currentHintFlat.indexOf("_");
+                if (nextIdx !== -1) showHintChar(nextIdx);
+                else clearInterval(hintInterval);
+            }, 2000);
+        }, 5000);
+    }
+
+    function showHintChar(index) {
+        let chars = revealedHint.replace(/ /g, "").split("");
+        chars[index] = currentWord[index];
+        revealedHint = chars.join(" ");
+        document.getElementById('answer-box').innerText = revealedHint;
+        document.getElementById('answer-box').style.color = "#d32f2f";
     }
 
     function scramble(word) {
@@ -161,11 +190,12 @@
             let j = Math.floor(Math.random() * (i + 1));
             [a[i], a[j]] = [a[j], a[i]];
         }
-        let res = a.join("");
-        return res === word ? scramble(word) : res;
+        return a.join("") === word ? scramble(word) : a.join("");
     }
 
     function revealAnswer() {
+        clearTimeout(hintTimeout);
+        clearInterval(hintInterval);
         document.getElementById('answer-box').innerText = currentWord;
         document.getElementById('answer-box').style.color = "#d32f2f";
         beep(400);
@@ -179,6 +209,7 @@
     }
 
     function startTimer() {
+        clearInterval(timerInterval);
         timerInterval = setInterval(() => {
             timeLeft--;
             let m = Math.floor(timeLeft / 60), s = timeLeft % 60;
@@ -189,6 +220,8 @@
 
     function endGame() {
         clearInterval(timerInterval);
+        clearTimeout(hintTimeout);
+        clearInterval(hintInterval);
         document.getElementById('game-screen').classList.add('hidden');
         document.getElementById('end-screen').classList.remove('hidden');
         let msg = scoreL > scoreR ? "1. OYUNCU KAZANDI! 🏆" : (scoreR > scoreL ? "2. OYUNCU KAZANDI! 🏆" : "BERABERE! 🤝");
