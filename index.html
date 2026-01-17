@@ -32,7 +32,6 @@
             margin: 0; text-align: center; color: #fff; text-shadow: 3px 3px 0px #76b018; 
         }
 
-        /* Bilgi Çubuğu */
         .top-info { 
             width: 100%; display: flex; justify-content: space-between; align-items: center; 
             background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 50px; 
@@ -47,7 +46,6 @@
         }
         .home-btn:hover { background: #76b018; transform: scale(1.1); }
 
-        /* Oyun Düzeni */
         .play-area { 
             width: 100%; display: flex; flex-wrap: wrap; 
             justify-content: center; align-items: stretch; gap: 20px; 
@@ -63,7 +61,6 @@
         .puan-btn { 
             width: 100%; padding: 12px; border: none; border-radius: 12px; 
             font-weight: bold; cursor: pointer; color: white; transition: 0.2s;
-            opacity: 1;
         }
         .puan-btn:disabled { background: #333 !important; cursor: not-allowed; opacity: 0.5; }
         .btn-l { background: #e91e63; }
@@ -160,7 +157,7 @@
     const allWords = ["ELMA", "ARMUT", "KİRAZ", "VİŞNE", "KAVUN", "KARPUZ", "KAYISI", "ÇİLEK", "LİMON", "AYVA", "ÜZÜM", "İNCİR", "ERİK", "DONDURMA", "PASTA", "BÖREK", "ÇÖREK", "EKMEK", "PEYNİR", "ZEYTİN", "YUMURTA", "YOĞURT", "REÇEL", "PEKMEZ", "PIRASA", "LAHANA", "ISPANAK", "HAVUÇ", "PATATES", "DOMATES", "BİBER", "KABAK", "MANTAR", "MARUL", "PANCAR", "FASULYE", "BEZELYE", "MERCİMEK", "NOHUT", "PİRİNÇ", "BULGUR", "MAKARNA", "ASLAN", "KAPLAN", "ZEBRA", "ZÜRAFA", "MAYMUN", "SİNCAP", "TAVŞAN", "TİLKİ", "KURT", "AYI", "KEDİ", "KÖPEK", "ÖRDEK", "TAVUK", "HOROZ", "KARTAL", "ŞAHİN", "BALIK", "YUNUS", "BALİNA", "ARI", "KARINCA", "KELEBEK", "KUZU", "KOYUN", "KEÇİ", "İNEK", "BOĞA", "YILAN", "TİMSAH", "KAPLUMBAĞA", "ANKARA", "İZMİR", "BURSA", "ADANA", "KONYA", "ANTALYA", "SAMSUN", "SİVAS", "ORDU", "RİZE", "MUĞLA", "AYDIN", "DENİZLİ", "KARS", "TOKAT", "AMASYA", "ÇORUM", "BOLU", "HATAY", "MERSİN", "UŞAK", "NİĞDE", "VAN", "MALATYA", "ELAZIĞ", "TÜRKİYE", "ALMANYA", "FRANSA", "İTALYA", "İSPANYA", "RUSYA", "ÇİN", "JAPONYA", "MISIR", "KANADA", "BREZİLYA", "İSVİÇRE", "BELÇİKA", "HOLLANDA", "İRAN", "AZERBAYCAN", "SURİYE", "KALEM", "SİLGİ", "DEFTER", "KİTAP", "ÇANTA", "CETVEL", "MAKAS", "DOLAP", "MASA", "SANDALYE", "PERDE", "LAMBA", "AYNA", "SAAT", "RADYO", "TELEFON", "TABAK", "KAŞIK", "ÇATAL", "TAVA", "TEPSİ", "BARDAK", "SÜRAHİ", "HAVLU", "SABUN", "FIRÇA", "TARAK", "GÖZLÜK", "ŞEMSİYE", "KEMER", "CEKET", "KAZAK", "PANTOLON", "GÖMLEK", "AYAKKABI", "TERLİK", "ELBİSE", "ŞAPKA", "YASTIK", "YORGAN", "BATTANİYE", "GÜNEŞ", "DÜNYA", "YILDIZ", "BULUT", "YAĞMUR", "RÜZGAR", "TOPRAK", "DENİZ", "NEHİR", "ORMAN", "ÇİÇEK", "AĞAÇ", "YAPRAK", "TOHUM", "GÖKKUŞAĞI", "GEZEGEN", "TELESKOP", "DENEY", "MÜZE", "SARAY", "OKUL", "SINIF", "DERS", "SINAV", "BAŞARI", "OYUN", "TATİL", "BAYRAM", "CUMHURİYET", "ADALET", "HUKUK", "KÜLTÜR", "TARİH", "İSKELET", "HÜCRE", "DAMAR", "BEYİN", "MİDE", "KALP", "SAĞLIK", "KIZILAY", "YEŞİLAY", "TRAFİK", "ARABA", "OTOBÜS", "KAMYON", "BİSİKLET", "UÇAK", "GEMİ", "TREN", "METRO", "VAPUR", "BALON", "ROKET", "BİLGİSAYAR", "KLAVYE", "EKRAN", "FARE", "YAZILIM", "KODLAMA", "ROBOT", "ENERJİ", "ELEKTRİK", "PİL", "TABLET", "KABLOLU", "ANAHTAR"];
 
     let wordPool = [], scoreL = 0, scoreR = 0, scoreS = 0, timeLeft = 0, currentWord = "", timerInterval;
-    let gameMode = "", currentPossiblePoints = 10, hintState = "", answerRevealed = false;
+    let gameMode = "", currentPossiblePoints = 10, nextHintIndex = 0;
 
     function selectMode(m) {
         gameMode = m;
@@ -183,7 +180,7 @@
             document.getElementById('answer-box').classList.add('hidden');
             document.getElementById('p1-panel').classList.add('hidden');
             document.getElementById('p2-panel').classList.add('hidden');
-            document.getElementById('user-input').focus();
+            setTimeout(() => document.getElementById('user-input').focus(), 100);
         } else {
             document.getElementById('p1-panel').classList.remove('hidden');
             document.getElementById('p2-panel').classList.remove('hidden');
@@ -202,7 +199,7 @@
         const idx = Math.floor(Math.random() * wordPool.length);
         currentWord = wordPool.splice(idx, 1)[0].toUpperCase();
         currentPossiblePoints = 10;
-        hintState = "_".repeat(currentWord.length);
+        nextHintIndex = 0;
         answerRevealed = false;
         
         if(gameMode === 'multi') {
@@ -213,9 +210,10 @@
         document.getElementById('scrambled-box').innerText = scramble(currentWord);
         
         if(gameMode === 'single') {
-            document.getElementById('user-input').value = "";
-            document.getElementById('user-input').placeholder = hintState.split("").join(" ");
-            document.getElementById('user-input').focus();
+            const input = document.getElementById('user-input');
+            input.value = "";
+            input.placeholder = "_ ".repeat(currentWord.length).trim();
+            input.focus();
         } else {
             document.getElementById('answer-box').innerText = "CEVABI GÖSTER";
             document.getElementById('answer-box').style.color = "#5d4037";
@@ -223,28 +221,39 @@
     }
 
     function getManualHint() {
-        if (currentPossiblePoints > 2) {
-            let nextIdx = hintState.indexOf("_");
-            if (nextIdx !== -1) {
-                let chars = hintState.split("");
-                chars[nextIdx] = currentWord[nextIdx];
-                hintState = chars.join("");
-                document.getElementById('user-input').placeholder = hintState.split("").join(" ");
-                currentPossiblePoints -= 2;
-                beep(300);
+        if (currentPossiblePoints > 2 && nextHintIndex < currentWord.length) {
+            const input = document.getElementById('user-input');
+            const currentVal = input.value.toLocaleUpperCase('tr-TR');
+            
+            // Mevcut yazı alanına harfi ekle
+            let newVal = currentVal.split("");
+            newVal[nextHintIndex] = currentWord[nextHintIndex];
+            input.value = newVal.join("");
+            
+            nextHintIndex++;
+            currentPossiblePoints -= 2;
+            beep(300);
+            input.focus();
+
+            // Eğer ipucu ile kelime tamamlandıysa kontrol et
+            if (input.value.toLocaleUpperCase('tr-TR') === currentWord) {
+                checkSingleAnswer(input.value);
             }
         }
     }
 
     document.getElementById('user-input').addEventListener('input', function() {
-        let val = this.value.toLocaleUpperCase('tr-TR').trim();
-        if (val === currentWord) {
+        checkSingleAnswer(this.value);
+    });
+
+    function checkSingleAnswer(val) {
+        if (val.toLocaleUpperCase('tr-TR').trim() === currentWord) {
             scoreS += currentPossiblePoints;
             document.getElementById('score-s').innerText = scoreS;
             playSuccess();
             nextQuestion();
         }
-    });
+    }
 
     function addScoreMulti(side) {
         if(!answerRevealed) return;
