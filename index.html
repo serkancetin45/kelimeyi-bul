@@ -8,95 +8,37 @@
         @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Quicksand:wght@700&display=swap');
 
         * { box-sizing: border-box; }
-        body { 
-            margin: 0; padding: 0; background: #000; color: #fff; 
-            font-family: 'Quicksand', sans-serif; min-height: 100vh; 
-            display: flex; justify-content: center; align-items: center; 
-            overflow-x: hidden;
-        }
-
-        #game-container { 
-            width: 100%; max-width: 1000px; padding: 20px; 
-            display: flex; flex-direction: column; align-items: center; min-height: 500px;
-            position: relative;
-        }
-
-        .screen { 
-            width: 100%; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; gap: 20px; 
-        }
+        body { margin: 0; padding: 0; background: #000; color: #fff; font-family: 'Quicksand', sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; }
+        #game-container { width: 100%; max-width: 1000px; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 500px; position: relative; }
+        .screen { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
         .hidden { display: none !important; }
+        h1 { font-family: 'Luckiest Guy', cursive; font-size: clamp(35px, 8vw, 75px); margin: 0; text-align: center; color: #fff; text-shadow: 3px 3px 0px #76b018; }
 
-        h1 { 
-            font-family: 'Luckiest Guy', cursive; font-size: clamp(35px, 8vw, 75px); 
-            margin: 0; text-align: center; color: #fff; text-shadow: 3px 3px 0px #76b018; 
-        }
-
-        .top-info { 
-            width: 100%; display: flex; justify-content: space-between; align-items: center; 
-            background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 50px; 
-            font-size: 18px; color: #ffcc33; font-weight: 800; margin-bottom: 20px;
-        }
-
-        .home-btn {
-            background: #5d4037; color: white; border: 2px solid #fff;
-            width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 20px;
-            transition: 0.3s;
-        }
-        .home-btn:hover { background: #76b018; transform: scale(1.1); }
-
-        .play-area { 
-            width: 100%; display: flex; flex-wrap: wrap; 
-            justify-content: center; align-items: stretch; gap: 20px; 
-        }
+        .top-info { width: 100%; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 50px; font-size: 18px; color: #ffcc33; font-weight: 800; margin-bottom: 20px; gap: 10px; }
+        .home-btn { background: #5d4037; color: white; border: 2px solid #fff; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: 0.3s; z-index: 10; }
         
-        .player-panel { 
-            flex: 1; min-width: 160px; background: rgba(255,255,255,0.05); 
-            border: 2px solid #76b018; border-radius: 20px; padding: 15px; 
-            display: flex; flex-direction: column; align-items: center; gap: 10px; 
-        }
+        .toggle-btn { background: #5d4037; color: white; border: 2px solid #fff; padding: 5px 15px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .toggle-on { background: #76b018; }
 
+        .play-area { width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 20px; }
+        .player-panel { flex: 1; min-width: 160px; background: rgba(255,255,255,0.05); border: 2px solid #76b018; border-radius: 20px; padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
         .score-val { font-size: 45px; color: #ffcc33; font-weight: 800; }
-        .puan-btn { 
-            width: 100%; padding: 12px; border: none; border-radius: 12px; 
-            font-weight: bold; cursor: pointer; color: white; transition: 0.2s;
-        }
+        .puan-btn { width: 100%; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; }
         .puan-btn:disabled { background: #333 !important; cursor: not-allowed; opacity: 0.5; }
         .btn-l { background: #e91e63; }
         .btn-r { background: #2196f3; }
 
         .word-display { flex: 2; min-width: 300px; display: flex; flex-direction: column; gap: 15px; }
-
-        #scrambled-box { 
-            background: #76b018; color: white; border-radius: 20px; padding: 25px; 
-            font-size: clamp(24px, 4vw, 36px); font-weight: 800; text-align: center; 
-            letter-spacing: 6px; min-height: 100px; display: flex; align-items: center; justify-content: center; 
-        }
-
-        #answer-box { 
-            background: #ffcc33; color: #5d4037; border-radius: 20px; padding: 25px; 
-            font-size: clamp(20px, 3.5vw, 32px); font-weight: 800; text-align: center; 
-            min-height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; 
-        }
+        #scrambled-box { background: #76b018; color: white; border-radius: 20px; padding: 25px; font-size: clamp(24px, 4vw, 36px); font-weight: 800; text-align: center; letter-spacing: 6px; min-height: 100px; display: flex; align-items: center; justify-content: center; }
+        #answer-box { background: #ffcc33; color: #5d4037; border-radius: 20px; padding: 25px; font-size: clamp(20px, 3.5vw, 32px); font-weight: 800; text-align: center; min-height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        #user-input { width: 100%; padding: 18px; font-size: 24px; border-radius: 15px; border: 4px solid #76b018; text-align: center; font-family: 'Quicksand'; font-weight: bold; outline: none; background: #fff; color: #000; }
         
-        #user-input { 
-            width: 100%; padding: 18px; font-size: 24px; border-radius: 15px; 
-            border: 4px solid #76b018; text-align: center; font-family: 'Quicksand'; 
-            font-weight: bold; outline: none; background: #fff; color: #000; 
-        }
-
         .hint-btn { background: #5d4037; color: white; border: 2px solid #fff; padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: bold; }
         #skip-btn { background: #ff5722; color: white; border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; }
-        
         .btn-start { padding: 15px 45px; font-size: 24px; font-weight: bold; background: #76b018; color: white; border: 4px solid #fff; border-radius: 50px; cursor: pointer; transition: 0.3s; }
         .mode-btn { background: #2196f3; width: 280px; }
 
-        @media (max-width: 650px) { 
-            .play-area { flex-direction: column; } 
-            .player-panel { width: 100%; flex-direction: row; justify-content: space-around; order: 2; } 
-            .word-display { order: 1; width: 100%; } 
-        }
+        @media (max-width: 650px) { .play-area { flex-direction: column; } .player-panel { width: 100%; flex-direction: row; justify-content: space-around; order: 2; } .word-display { order: 1; width: 100%; } }
     </style>
 </head>
 <body>
@@ -120,6 +62,8 @@
         <div class="top-info">
             <button class="home-btn" onclick="location.reload()">🏠</button>
             <div id="timer-box">⏱ <span id="timer">00:00</span></div>
+            <div id="points-info" style="color:#76b018">DEĞER: <span id="current-point-val">10</span></div>
+            <button id="hint-toggle-multi" class="toggle-btn toggle-on hidden" onclick="toggleMultiHint()">İPUCU: AÇIK</button>
             <div id="single-score-box" class="hidden">⭐ <span id="score-s">0</span></div>
             <button id="hint-btn-manual" class="hint-btn hidden" onclick="getManualHint()">İPUCU AL (-2)</button>
         </div>
@@ -154,10 +98,11 @@
 </div>
 
 <script>
-    const allWords = ["ELMA", "ARMUT", "KİRAZ", "VİŞNE", "KAVUN", "KARPUZ", "KAYISI", "ÇİLEK", "LİMON", "AYVA", "ÜZÜM", "İNCİR", "ERİK", "DONDURMA", "PASTA", "BÖREK", "ÇÖREK", "EKMEK", "PEYNİR", "ZEYTİN", "YUMURTA", "YOĞURT", "REÇEL", "PEKMEZ", "PIRASA", "LAHANA", "ISPANAK", "HAVUÇ", "PATATES", "DOMATES", "BİBER", "KABAK", "MANTAR", "MARUL", "PANCAR", "FASULYE", "BEZELYE", "MERCİMEK", "NOHUT", "PİRİNÇ", "BULGUR", "MAKARNA", "ASLAN", "KAPLAN", "ZEBRA", "ZÜRAFA", "MAYMUN", "SİNCAP", "TAVŞAN", "TİLKİ", "KURT", "AYI", "KEDİ", "KÖPEK", "ÖRDEK", "TAVUK", "HOROZ", "KARTAL", "ŞAHİN", "BALIK", "YUNUS", "BALİNA", "ARI", "KARINCA", "KELEBEK", "KUZU", "KOYUN", "KEÇİ", "İNEK", "BOĞA", "YILAN", "TİMSAH", "KAPLUMBAĞA", "ANKARA", "İZMİR", "BURSA", "ADANA", "KONYA", "ANTALYA", "SAMSUN", "SİVAS", "ORDU", "RİZE", "MUĞLA", "AYDIN", "DENİZLİ", "KARS", "TOKAT", "AMASYA", "ÇORUM", "BOLU", "HATAY", "MERSİN", "UŞAK", "NİĞDE", "VAN", "MALATYA", "ELAZIĞ", "TÜRKİYE", "ALMANYA", "FRANSA", "İTALYA", "İSPANYA", "RUSYA", "ÇİN", "JAPONYA", "MISIR", "KANADA", "BREZİLYA", "İSVİÇRE", "BELÇİKA", "HOLLANDA", "İRAN", "AZERBAYCAN", "SURİYE", "KALEM", "SİLGİ", "DEFTER", "KİTAP", "ÇANTA", "CETVEL", "MAKAS", "DOLAP", "MASA", "SANDALYE", "PERDE", "LAMBA", "AYNA", "SAAT", "RADYO", "TELEFON", "TABAK", "KAŞIK", "ÇATAL", "TAVA", "TEPSİ", "BARDAK", "SÜRAHİ", "HAVLU", "SABUN", "FIRÇA", "TARAK", "GÖZLÜK", "ŞEMSİYE", "KEMER", "CEKET", "KAZAK", "PANTOLON", "GÖMLEK", "AYAKKABI", "TERLİK", "ELBİSE", "ŞAPKA", "YASTIK", "YORGAN", "BATTANİYE", "GÜNEŞ", "DÜNYA", "YILDIZ", "BULUT", "YAĞMUR", "RÜZGAR", "TOPRAK", "DENİZ", "NEHİR", "ORMAN", "ÇİÇEK", "AĞAÇ", "YAPRAK", "TOHUM", "GÖKKUŞAĞI", "GEZEGEN", "TELESKOP", "DENEY", "MÜZE", "SARAY", "OKUL", "SINIF", "DERS", "SINAV", "BAŞARI", "OYUN", "TATİL", "BAYRAM", "CUMHURİYET", "ADALET", "HUKUK", "KÜLTÜR", "TARİH", "İSKELET", "HÜCRE", "DAMAR", "BEYİN", "MİDE", "KALP", "SAĞLIK", "KIZILAY", "YEŞİLAY", "TRAFİK", "ARABA", "OTOBÜS", "KAMYON", "BİSİKLET", "UÇAK", "GEMİ", "TREN", "METRO", "VAPUR", "BALON", "ROKET", "BİLGİSAYAR", "KLAVYE", "EKRAN", "FARE", "YAZILIM", "KODLAMA", "ROBOT", "ENERJİ", "ELEKTRİK", "PİL", "TABLET", "KABLOLU", "ANAHTAR"];
+    const allWords = ["ELMA", "ARMUT", "KİRAZ", "VİŞNE", "KAVUN", "KARPUZ", "KAYISI", "ÇİLEK", "LİMON", "AYVA", "ÜZÜM", "İNCİR", "ERİK", "DONDURMA", "PASTA", "BÖREK", "ÇÖREK", "EKMEK", "PEYNİR", "ZEYTİN", "YUMURTA", "YOĞURT", "REÇEL", "PEKMEZ", "PIRASA", "LAHANA", "ISPANAK", "HAVUÇ", "PATATES", "DOMATES", "BİBER", "KABAK", "MANTAR", "MARUL", "PANCAR", "FASULYE", "BEZELYE", "NOHUT", "PİRİNÇ", "BULGUR", "MAKARNA", "ASLAN", "KAPLAN", "ZEBRA", "ZÜRAFA", "MAYMUN", "SİNCAP", "TAVŞAN", "TİLKİ", "KURT", "AYI", "KEDİ", "KÖPEK", "ÖRDEK", "TAVUK", "HOROZ", "KARTAL", "ŞAHİN", "BALIK", "YUNUS", "BALİNA", "ARI", "KARINCA", "KELEBEK", "KUZU", "KOYUN", "KEÇİ", "İNEK", "BOĞA", "YILAN", "TİMSAH", "KAPLUMBAĞA", "ANKARA", "İZMİR", "BURSA", "ADANA", "KONYA", "ANTALYA", "SAMSUN", "SİVAS", "ORDU", "RİZE", "MUĞLA", "AYDIN", "DENİZLİ", "KARS", "TOKAT", "AMASYA", "ÇORUM", "BOLU", "HATAY", "MERSİN", "UŞAK", "NİĞDE", "VAN", "MALATYA", "ELAZIĞ", "TÜRKİYE", "ALMANYA", "FRANSA", "İTALYA", "İSPANYA", "RUSYA", "ÇİN", "JAPONYA", "MISIR", "KANADA", "BREZİLYA", "İSVİÇRE", "BELÇİKA", "HOLLANDA", "İRAN", "AZERBAYCAN", "SURİYE", "KALEM", "SİLGİ", "DEFTER", "KİTAP", "ÇANTA", "CETVEL", "MAKAS", "DOLAP", "MASA", "SANDALYE", "PERDE", "LAMBA", "AYNA", "SAAT", "RADYO", "TELEFON", "TABAK", "KAŞIK", "ÇATAL", "TAVA", "TEPSİ", "BARDAK", "SÜRAHİ", "HAVLU", "SABUN", "FIRÇA", "TARAK", "GÖZLÜK", "ŞEMSİYE", "KEMER", "CEKET", "KAZAK", "PANTOLON", "GÖMLEK", "AYAKKABI", "TERLİK", "ELBİSE", "ŞAPKA", "YASTIK", "YORGAN", "BATTANİYE", "GÜNEŞ", "DÜNYA", "YILDIZ", "BULUT", "YAĞMUR", "RÜZGAR", "TOPRAK", "DENİZ", "NEHİR", "ORMAN", "ÇİÇEK", "AĞAÇ", "YAPRAK", "TOHUM", "GÖKKUŞAĞI", "GEZEGEN", "TELESKOP", "DENEY", "MÜZE", "SARAY", "OKUL", "SINIF", "DERS", "SINAV", "BAŞARI", "OYUN", "TATİL", "BAYRAM", "CUMHURİYET", "ADALET", "HUKUK", "KÜLTÜR", "TARİH", "İSKELET", "HÜCRE", "DAMAR", "BEYİN", "MİDE", "KALP", "SAĞLIK", "KIZILAY", "YEŞİLAY", "TRAFİK", "ARABA", "OTOBÜS", "KAMYON", "BİSİKLET", "UÇAK", "GEMİ", "TREN", "METRO", "VAPUR", "BALON", "ROKET", "BİLGİSAYAR", "KLAVYE", "EKRAN", "FARE", "YAZILIM", "KODLAMA", "ROBOT", "ENERJİ", "ELEKTRİK", "PİL", "TABLET", "KABLOLU", "ANAHTAR"];
 
     let wordPool = [], scoreL = 0, scoreR = 0, scoreS = 0, timeLeft = 0, currentWord = "", timerInterval;
-    let gameMode = "", currentPossiblePoints = 10, nextHintIndex = 0;
+    let gameMode = "", currentPossiblePoints = 10, nextHintIndex = 0, autoHintTimeout, autoHintInterval;
+    let answerRevealed = false, isMultiHintEnabled = true;
 
     function selectMode(m) {
         gameMode = m;
@@ -165,11 +110,23 @@
         document.getElementById('time-screen').classList.remove('hidden');
     }
 
+    function toggleMultiHint() {
+        isMultiHintEnabled = !isMultiHintEnabled;
+        const btn = document.getElementById('hint-toggle-multi');
+        btn.innerText = isMultiHintEnabled ? "İPUCU: AÇIK" : "İPUCU: KAPALI";
+        btn.classList.toggle('toggle-on');
+        if (!isMultiHintEnabled) {
+            clearTimeout(autoHintTimeout);
+            clearInterval(autoHintInterval);
+        } else if (!answerRevealed && gameMode === 'multi') {
+            startMultiAutoHintLogic();
+        }
+    }
+
     function startGame(seconds) {
         timeLeft = seconds;
         scoreL = 0; scoreR = 0; scoreS = 0;
         wordPool = [...allWords]; 
-        
         document.getElementById('time-screen').classList.add('hidden');
         document.getElementById('game-screen').classList.remove('hidden');
         
@@ -180,6 +137,7 @@
             document.getElementById('answer-box').classList.add('hidden');
             document.getElementById('p1-panel').classList.add('hidden');
             document.getElementById('p2-panel').classList.add('hidden');
+            document.getElementById('hint-toggle-multi').classList.add('hidden');
             setTimeout(() => document.getElementById('user-input').focus(), 100);
         } else {
             document.getElementById('p1-panel').classList.remove('hidden');
@@ -188,6 +146,7 @@
             document.getElementById('user-input').classList.add('hidden');
             document.getElementById('single-score-box').classList.add('hidden');
             document.getElementById('hint-btn-manual').classList.add('hidden');
+            document.getElementById('hint-toggle-multi').classList.remove('hidden');
         }
         
         nextQuestion();
@@ -196,15 +155,21 @@
 
     function nextQuestion() {
         if (wordPool.length === 0) { endGame(); return; }
+        clearTimeout(autoHintTimeout);
+        clearInterval(autoHintInterval);
+
         const idx = Math.floor(Math.random() * wordPool.length);
         currentWord = wordPool.splice(idx, 1)[0].toUpperCase();
         currentPossiblePoints = 10;
         nextHintIndex = 0;
         answerRevealed = false;
         
+        document.getElementById('current-point-val').innerText = currentPossiblePoints;
+
         if(gameMode === 'multi') {
             document.getElementById('btn-p1').disabled = true;
             document.getElementById('btn-p2').disabled = true;
+            if (isMultiHintEnabled) startMultiAutoHintLogic();
         }
 
         document.getElementById('scrambled-box').innerText = scramble(currentWord);
@@ -220,31 +185,47 @@
         }
     }
 
+    function startMultiAutoHintLogic() {
+        clearTimeout(autoHintTimeout);
+        clearInterval(autoHintInterval);
+        autoHintTimeout = setTimeout(() => {
+            autoHintInterval = setInterval(() => {
+                if (nextHintIndex < currentWord.length - 1 && currentPossiblePoints > 1) {
+                    let hintChars = currentWord.substring(0, nextHintIndex + 1);
+                    let underscoreCount = currentWord.length - (nextHintIndex + 1);
+                    let displayHint = hintChars.split("").join(" ") + (underscoreCount > 0 ? " " + "_ ".repeat(underscoreCount).trim() : "");
+                    
+                    document.getElementById('answer-box').innerText = displayHint;
+                    document.getElementById('answer-box').style.color = "#d32f2f";
+                    
+                    nextHintIndex++;
+                    currentPossiblePoints--;
+                    document.getElementById('current-point-val').innerText = currentPossiblePoints;
+                    beep(200);
+                } else {
+                    clearInterval(autoHintInterval);
+                }
+            }, 3000);
+        }, 5000);
+    }
+
     function getManualHint() {
         if (currentPossiblePoints > 2 && nextHintIndex < currentWord.length) {
             const input = document.getElementById('user-input');
-            const currentVal = input.value.toLocaleUpperCase('tr-TR');
-            
-            // Mevcut yazı alanına harfi ekle
+            let currentVal = input.value.toLocaleUpperCase('tr-TR');
             let newVal = currentVal.split("");
-            newVal[nextHintIndex] = currentWord[nextHintIndex];
+            for(let i=0; i <= nextHintIndex; i++) newVal[i] = currentWord[i];
             input.value = newVal.join("");
-            
             nextHintIndex++;
             currentPossiblePoints -= 2;
+            document.getElementById('current-point-val').innerText = currentPossiblePoints;
             beep(300);
             input.focus();
-
-            // Eğer ipucu ile kelime tamamlandıysa kontrol et
-            if (input.value.toLocaleUpperCase('tr-TR') === currentWord) {
-                checkSingleAnswer(input.value);
-            }
+            if (input.value.toLocaleUpperCase('tr-TR') === currentWord) checkSingleAnswer(input.value);
         }
     }
 
-    document.getElementById('user-input').addEventListener('input', function() {
-        checkSingleAnswer(this.value);
-    });
+    document.getElementById('user-input').addEventListener('input', function() { checkSingleAnswer(this.value); });
 
     function checkSingleAnswer(val) {
         if (val.toLocaleUpperCase('tr-TR').trim() === currentWord) {
@@ -257,14 +238,17 @@
 
     function addScoreMulti(side) {
         if(!answerRevealed) return;
-        if(side === 'L') { scoreL += 10; document.getElementById('score-l').innerText = scoreL; }
-        else { scoreR += 10; document.getElementById('score-r').innerText = scoreR; }
+        if(side === 'L') scoreL += currentPossiblePoints; else scoreR += currentPossiblePoints;
+        document.getElementById('score-l').innerText = scoreL;
+        document.getElementById('score-r').innerText = scoreR;
         beep(800);
         nextQuestion();
     }
 
     function revealAnswer() {
         answerRevealed = true;
+        clearTimeout(autoHintTimeout);
+        clearInterval(autoHintInterval);
         document.getElementById('answer-box').innerText = currentWord;
         document.getElementById('answer-box').style.color = "#d32f2f";
         document.getElementById('btn-p1').disabled = false;
@@ -274,10 +258,7 @@
 
     function scramble(word) {
         let a = word.split(""), n = a.length;
-        for(let i = n - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [a[i], a[j]] = [a[j], a[i]];
-        }
+        for(let i = n - 1; i > 0; i--) { let j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
         return a.join("") === word ? scramble(word) : a.join("");
     }
 
@@ -292,7 +273,7 @@
     }
 
     function endGame() {
-        clearInterval(timerInterval);
+        clearInterval(timerInterval); clearTimeout(autoHintTimeout); clearInterval(autoHintInterval);
         document.getElementById('game-screen').classList.add('hidden');
         document.getElementById('end-screen').classList.remove('hidden');
         if(gameMode === 'single') {
@@ -305,20 +286,8 @@
         }
     }
 
-    function beep(f) {
-        try {
-            let c = new (window.AudioContext || window.webkitAudioContext)();
-            let o = c.createOscillator(), g = c.createGain();
-            o.connect(g); g.connect(c.destination);
-            o.frequency.value = f; o.start();
-            g.gain.exponentialRampToValueAtTime(0.00001, c.currentTime + 0.1);
-            o.stop(c.currentTime + 0.1);
-        } catch(e) {}
-    }
-
-    function playSuccess() {
-        beep(600); setTimeout(() => beep(800), 100);
-    }
+    function beep(f) { try { let c = new (window.AudioContext || window.webkitAudioContext)(); let o = c.createOscillator(), g = c.createGain(); o.connect(g); g.connect(c.destination); o.frequency.value = f; o.start(); g.gain.exponentialRampToValueAtTime(0.00001, c.currentTime + 0.1); o.stop(c.currentTime + 0.1); } catch(e) {} }
+    function playSuccess() { beep(600); setTimeout(() => beep(800), 100); }
 </script>
 </body>
 </html>
